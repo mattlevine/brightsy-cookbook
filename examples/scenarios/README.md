@@ -2,6 +2,31 @@
 
 `client.scenarios`: `list`, `get`, `getExecutions`, **`trigger`**, plus `create` / `update` / `delete` for definitions (see SDK). Legacy one-off: `client.scenario(id).trigger(data)`.
 
+## Code snippets
+
+```javascript
+import { BrightsyClient } from '@brightsy/client';
+
+const client = new BrightsyClient({
+  api_key: process.env.BRIGHTSY_API_KEY,
+  account_id: process.env.BRIGHTSY_ACCOUNT_ID,
+});
+
+const all = await client.scenarios.list();
+const scenarioId = process.env.BRIGHTSY_SCENARIO_ID || all[0]?.id;
+
+await client.scenarios.get(scenarioId);
+await client.scenarios.getExecutions(scenarioId, { page: 1, limit: 3 });
+
+const input = process.env.BRIGHTSY_SCENARIO_INPUT
+  ? JSON.parse(process.env.BRIGHTSY_SCENARIO_INPUT)
+  : {};
+
+const run = await client.scenarios.trigger(scenarioId, { input });
+```
+
+Full runnable script: [`index.mjs`](index.mjs).
+
 ## Env
 
 | Variable | Required | Notes |

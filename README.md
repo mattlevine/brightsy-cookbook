@@ -27,6 +27,26 @@ pnpm run examples:smoke
 
 Set `BRIGHTSY_API_KEY` (and any other vars your recipe needs) in the environment or a local `.env` (not committed).
 
+### Minimal client usage
+
+```javascript
+import { BrightsyClient } from '@brightsy/client';
+
+const client = new BrightsyClient({
+  api_key: process.env.BRIGHTSY_API_KEY,
+  account_id: process.env.BRIGHTSY_ACCOUNT_ID, // required for most account APIs
+});
+
+const types = await client.cma.listRecordTypes();
+const slug = types[0]?.slug;
+if (slug) {
+  const res = await client.cma.recordType(slug).orderBy('updated_at', 'desc').page(1).limit(5).get();
+  console.log(res.data?.length, 'rows');
+}
+```
+
+See [`examples/node-hello`](examples/node-hello) for the smallest runnable script and the other `examples/*` folders for full flows.
+
 ## Updating dependency pins
 
 Bump `@brightsy/*` in each [`examples/*/package.json`](examples/) when you publish new releases from the monorepo, or use Renovate.

@@ -4,6 +4,88 @@
 
 Where **operators** (see SDK `WhereFilter`): `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`, `ilike`, `in`, `notIn`, `begins`, `ends`.
 
+## Code snippets
+
+**Client and record types**
+
+```javascript
+import { BrightsyClient } from '@brightsy/client';
+
+const client = new BrightsyClient({
+  api_key: process.env.BRIGHTSY_API_KEY,
+  account_id: process.env.BRIGHTSY_ACCOUNT_ID,
+});
+
+const types = await client.cma.listRecordTypes();
+const slug = process.env.BRIGHTSY_RECORD_TYPE_SLUG || types[0]?.slug;
+const detail = await client.recordTypes.get(slug);
+```
+
+**List + debug URL (CMA)**
+
+```javascript
+const listed = await client.cma
+  .recordType(slug)
+  .orderBy('updated_at', 'desc')
+  .page(1)
+  .limit(5)
+  .get();
+
+const url = client.cma
+  .recordType(slug)
+  .where('updated_at', 'gte', '1970-01-01')
+  .orderBy('updated_at', 'desc')
+  .page(1)
+  .limit(5)
+  .getUrl();
+```
+
+**Advanced filters, tags, projection**
+
+```javascript
+const chain = client.cma
+  .recordType(slug)
+  .where('updated_at', 'gte', '2020-01-01T00:00:00.000Z')
+  .and('updated_at', 'lte', new Date().toISOString())
+  .where('status', 'eq', 'published') // optional extra predicate
+  .tags('featured')
+  .select('id', 'title', 'updated_at')
+  .orderBy('updated_at', 'desc')
+  .page(1)
+  .limit(10);
+
+const res = await chain.get();
+```
+
+**Aggregates**
+
+```javascript
+await client.cma.recordType(slug).where('updated_at', 'gte', '1970-01-01').count().page(1).limit(5).get();
+
+await client.cma.recordType(slug).sum('amount').count().page(1).limit(5).get();
+
+await client.cma.recordType(slug).groupBy('category_id').count().page(1).limit(20).get();
+```
+
+**CDA natural language + recency**
+
+```javascript
+await client.cda
+  .recordType(slug)
+  .nlSearch('recent updates', 0.65)
+  .withFreshness(14)
+  .limit(5)
+  .get();
+```
+
+**Batch by IDs**
+
+```javascript
+await client.cma.recordType(slug).getByIds(['uuid-a', 'uuid-b']);
+```
+
+Full runnable script: [`index.mjs`](index.mjs). Set `BRIGHTSY_VERBOSE=1` for CRUD and query cheatsheets printed to the console.
+
 ## Env
 
 | Variable | Required | Notes |
