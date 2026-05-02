@@ -47,6 +47,78 @@ if (slug) {
 
 See [`examples/node-hello`](examples/node-hello) for the smallest runnable script and the other `examples/*` folders for full flows.
 
+### Query records (advanced filters, CMA)
+
+Structured filters stack with `where` / `and` / `or` (operators include `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`, `ilike`, `in`, `notIn`, `begins`, `ends`). Optional `tags`, `select` / `groupBy`, sorting, and pagination chain before `.get()`.
+
+```javascript
+const slug = 'posts'; // or from client.cma.listRecordTypes()
+
+const filtered = await client.cma
+  .recordType(slug)
+  .where('updated_at', 'gte', '2024-01-01T00:00:00.000Z')
+  .and('updated_at', 'lte', new Date().toISOString())
+  .where('status', 'eq', 'published')
+  .tags('featured')
+  .select('id', 'title', 'updated_at')
+  .orderBy('updated_at', 'desc')
+  .page(1)
+  .limit(20)
+  .get();
+
+// Inspect the exact query URL (useful while integrating)
+const debugUrl = client.cma
+  .recordType(slug)
+  .where('title', 'ilike', '%report%')
+  .page(1)
+  .limit(10)
+  .getUrl();
+```
+
+### Natural-language search (CDA)
+
+Semantic search over **published** content uses **`cda`** (not `cma`). `nlSearch(query, matchThreshold)` pairs with `withFreshness(timeDecayDays)` when you want recency blended into ranking.
+
+```javascript
+const slug = 'posts';
+
+const nl = await client.cda
+  .recordType(slug)
+  .nlSearch('Q4 goals and revenue summary', 0.72)
+  .withFreshness(14)
+  .limit(10)
+  .get();
+
+console.log(nl.data?.length, 'matches');
+```
+
+### Call an agent (stateless completion)
+
+List agents, pick one by id, then run a single chat turn with **`client.agent(agentId).complete()`** (messages follow a familiar `{ role, content }` shape). For multi-turn workspace chats, thread management, and tools, use **`AgentRequest`** on the SDK (`listChats()`, `chat(id).send()`, …).
+
+```javascript
+const { data, total } = await client.agents.list({ include_models: false });
+const agentId = data[0]?.id; // or a known UUID
+
+const agent = await client.agents.get(agentId);
+
+const completion = await client.agent(agentId).complete({
+  messages: [{ role: 'user', content: 'Summarize what you can do in one sentence.' }],
+  max_tokens: 120,
+});
+
+const text =
+  typeof completion?.message === 'string'
+    ? completion.message
+    : completion?.choices?.[0]?.message?.content ?? JSON.stringify(completion);
+
+console.log(text);
+```
+
+Runnable script: [`examples/agents`](examples/agents) (`pnpm --filter agents start`; set `BRIGHTSY_SKIP_COMPLETE=1` to skip the LLM call).
+
+For aggregates (`count`, `sum`, `avg`, …), `getByIds`, env-driven demos, and CRUD cheatsheets, run [`examples/records`](examples/records) (`pnpm --filter records start`, optional `BRIGHTSY_VERBOSE=1`).
+
 ## Updating dependency pins
 
 Bump `@brightsy/*` in each [`examples/*/package.json`](examples/) when you publish new releases from the monorepo, or use Renovate.
