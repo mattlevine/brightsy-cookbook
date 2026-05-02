@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "brightsy": {
+      "command": "npx",
+      "args": ["-y", "@brightsy/mcp-server@0.1.0"],
+      "env": {
+        "BRIGHTSY_API_KEY": "replace_me",
+        "BRIGHTSY_ACCOUNT_ID": "optional_account_uuid"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "brightsy-cookbook",
+  "private": true,
+  "description": "Examples and recipes for Brightsy SDK, CLI, and MCP (consumes published npm packages)",
+  "scripts": {
+    "install:all": "pnpm install",
+    "example:hello": "pnpm --filter node-hello start",
+    "example:records": "pnpm --filter records start",
+    "example:files": "pnpm --filter files start",
+    "example:webhooks": "pnpm --filter webhooks start",
+    "example:agents": "pnpm --filter agents start",
+    "example:scenarios": "pnpm --filter scenarios start",
+    "examples:smoke": "pnpm --filter node-hello start && pnpm --filter records start && pnpm --filter files start && pnpm --filter webhooks start && pnpm --filter agents start && pnpm --filter scenarios start"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@brightsy/types": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+overrides:
+  '@brightsy/types': 1.0.0
+
+importers:
+
+  .: {}
+
+  examples/node-hello:
+    dependencies:
+      '@brightsy/client':
+        specifier: ^1.0.13
+        version: 1.0.13
+
+packages:
+
+  '@brightsy/client@1.0.13':
+    resolution: {integrity: sha512-pYV3IXDfmeqc/MjKJS5acnUzeG40B0loJ9vF52O5C5fzemyXU1zBjmtDmUsepGok+v6bTgpswTRtBx315RurNg==}
+
+  '@brightsy/types@1.0.0':
+    resolution: {integrity: sha512-ciMJH+adKFn10vsOHUI/TxlwCOhbikGtFjhF4qGQVjNCbzRC2YD2JJDpE8Fh8vSxcUGPsKHnzKJ1Z6ghdotcAw==}
+
+snapshots:
+
+  '@brightsy/client@1.0.13':
+    dependencies:
+      '@brightsy/types': 1.0.0
+
+  '@brightsy/types@1.0.0': {}

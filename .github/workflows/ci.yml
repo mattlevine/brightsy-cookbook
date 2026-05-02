@@ -1,0 +1,26 @@
+name: Cookbook CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install
+      - name: SDK examples (no API key — dry exits)
+        run: pnpm run examples:smoke
+      - name: CLI --help from npm
+        run: npx --yes @brightsy/cli@^0.1.0 --help
+      - name: MCP server --help from npm
+        run: npx --yes @brightsy/mcp-server@^0.1.0 --help

@@ -1,0 +1,11 @@
+{
+  "name": "records",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "@brightsy/client": "^1.0.13"
+  }
+}
