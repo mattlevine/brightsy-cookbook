@@ -2,7 +2,7 @@
 
 Recipes and small examples for **[`@brightsy/client`](https://www.npmjs.com/package/@brightsy/client)**, the **[`brightsy` CLI](https://www.npmjs.com/package/@brightsy/cli)**, and the **[`@brightsy/mcp-server`](https://www.npmjs.com/package/@brightsy/mcp-server)** MCP host.
 
-**Source of truth** for the SDK, CLI, and MCP implementation is the [`brightsy-ai`](https://github.com/brightsy-ai/brightsy) monorepo (`packages/brightsy-types`, `packages/brightsy-schema-builder`, `packages/brightsy-client`, `packages/brightsy-cli`, `packages/brightsy-mcp-server`). This repository stays small: install published packages from npm and follow the guides below.
+**Source of truth** for the SDK, CLI, and MCP implementation is the [`brightsy-ai`](https://github.com/mattlevine/brightsy-ai) monorepo (`packages/brightsy-types`, `packages/brightsy-schema-builder`, `packages/brightsy-client`, `packages/brightsy-cli`, `packages/brightsy-mcp-server`). This repository stays small: install published packages from npm and follow the guides below.
 
 ## Layout
 
